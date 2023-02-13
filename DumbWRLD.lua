@@ -1076,7 +1076,7 @@ function killscript()
         end
     end
     -- setting the DumbWRLDState to false
-    DumbWRLDState = false
+    _G.DumbWRLDState = false
     -- killing the gui
     game:GetService("CoreGui"):FindFirstChild(_G.windowname):Destroy()
 end
