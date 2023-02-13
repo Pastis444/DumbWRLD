@@ -2,6 +2,7 @@
 -- If it is, then don't run it again
 
 if _G.DumbWRLDState then
+    print("DumbWRLD is already running!")
     return
 end
 
