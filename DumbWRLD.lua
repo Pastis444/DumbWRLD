@@ -1079,7 +1079,7 @@ function killscript()
     -- setting the DumbWRLDState to false
     _G.DumbWRLDState = false
     -- killing the gui
-    game:GetService("CoreGui"):FindFirstChild(Config.WindowName).Parent.Parent.Parent:Destroy()
+    game:GetService("CoreGui"):FindFirstChild(Config.WindowName).Parent.Parent:Destroy()
 end
 guisettings:CreateButton("Kill GUI", function() killscript() end)
 local DumbWRLDs = setttab:CreateSection("Configs")
