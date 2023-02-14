@@ -882,7 +882,7 @@ function makequests()
 end
 
 local Config = { WindowName = "🌘  DumbWRLD v"..temptable.version, Color = Color3.fromRGB(164, 84, 255)}
-print(f"Loading {Config.WindowName}...")
+print("Loading " ..Config.WindowName.. "...")
 local Window = library:CreateWindow(Config, game:GetService("CoreGui"))
 
 local hometab = Window:CreateTab("Home")
