@@ -1082,11 +1082,6 @@ function killscript()
     game:GetService("CoreGui"):FindFirstChild(_G.windowname):Destroy()
 end
 guisettings:CreateButton("Kill GUI", function() killscript() end)
-local DumbWRLDs = setttab:CreateSection("Configs")
-DumbWRLDs:CreateTextBox("Config Name", 'ex: stumpconfig', false, function(Value) temptable.configname = Value end)
-DumbWRLDs:CreateButton("Load Config", function() DumbWRLD = game:service'HttpService':JSONDecode(readfile("DumbWRLD/BSS_"..temptable.configname..".json")) end)
-DumbWRLDs:CreateButton("Save Config", function() writefile("DumbWRLD/BSS_"..temptable.configname..".json",game:service'HttpService':JSONEncode(DumbWRLD)) end)
-DumbWRLDs:CreateButton("Reset Config", function() DumbWRLD = defaultDumbWRLD end)
 local fieldsettings = setttab:CreateSection("Fields Settings")
 fieldsettings:CreateDropdown("Best White Field", temptable.whitefields, function(Option) DumbWRLD.bestfields.white = Option end)
 fieldsettings:CreateDropdown("Best Red Field", temptable.redfields, function(Option) DumbWRLD.bestfields.red = Option end)
@@ -1103,6 +1098,58 @@ pts:CreateTextBox("Asset ID", 'rbxassetid', false, function(Value) rarename = Va
 pts:CreateButton("Add Token To Priority List", function() table.insert(DumbWRLD.priority, rarename) game:GetService("CoreGui"):FindFirstChild(_G.windowname).Main:FindFirstChild("Priority List D",true):Destroy() pts:CreateDropdown("Priority List", DumbWRLD.priority, function(Option) end) end)
 pts:CreateButton("Remove Token From Priority List", function() table.remove(DumbWRLD.priority, api.tablefind(DumbWRLD.priority, rarename)) game:GetService("CoreGui"):FindFirstChild(_G.windowname).Main:FindFirstChild("Priority List D",true):Destroy() pts:CreateDropdown("Priority List", DumbWRLD.priority, function(Option) end) end)
 pts:CreateDropdown("Priority List", DumbWRLD.priority, function(Option) end)
+local DumbWRLDs = setttab:CreateSection("Configs")
+DumbWRLDs:CreateTextBox("Config Name", 'ex: stumpconfig', false, function(Value) temptable.configname = Value end)
+local function loadconfigs(file)
+    -- if the global variable "loadConf" exists, then the replace DumbWRLD with the config
+    if _G.loadConf then
+        DumbWRLD = game:service'HttpService':JSONDecode(readfile("DumbWRLD/BSS_".._G.loadConf..".json"))
+        _G.loadConf = nil
+    else
+        -- if the global variable "loadConf" doesn't exist, then load the config given in argument 1
+        DumbWRLD = game:service'HttpService':JSONDecode(readfile("DumbWRLD/BSS_"..file..".json"))
+    end
+    -- update the gui
+    for i,v in pairs(DumbWRLD.toggles) do
+        if type(DumbWRLD.toggles[i]) == "boolean" then
+            library:ChangeToggleState(i, v)
+        end
+    end
+    for i,v in pairs(DumbWRLD.bestfields) do
+        -- check if the value is a string
+        if type(DumbWRLD.bestfields[i]) == "string" then
+            library:ChangeDropdownValue(i, v)
+        end
+    end
+    for i,v in pairs(DumbWRLD.vars) do
+        -- check if the value is a string
+        if type(DumbWRLD.vars[i]) == "string" then
+            library:ChangeDropdownValue(i, v)
+        -- check if the value is a number
+        elseif type(DumbWRLD.vars[i]) == "number" then
+            -- if the index is "farmspeed" or "monstertimer" then change the textbox value
+            if i == "farmspeed" or i == "monstertimer" then
+                library:ChangeTextBoxValue(i, v)
+            else
+                -- if the index is not "farmspeed" or "monstertimer" then change the slider value
+                library:ChangeSliderValue(i, v)
+            end
+        -- check if the value is a keybind
+        elseif type(DumbWRLD.vars[i]) == "table" then
+            library:ChangeKeybindValue(i, v)
+        end
+    end
+    for i,v in pairs(DumbWRLD.dispensesettings) do
+        -- check if the value is a boolean
+        if type(DumbWRLD.dispensesettings[i]) == "boolean" then
+            library:ChangeToggleState(i, v)
+        end
+    end
+    library:ChangeSliderValue("planterat", DumbWRLD.planterat)
+end
+DumbWRLDs:CreateButton("Load Config", function() loadconfigs(temptable.configname) end)
+DumbWRLDs:CreateButton("Save Config", function() writefile("DumbWRLD/BSS_"..temptable.configname..".json",game:service'HttpService':JSONEncode(DumbWRLD)) end)
+DumbWRLDs:CreateButton("Reset Config", function() DumbWRLD = defaultDumbWRLD end)
 
 -- script
 
