@@ -1104,6 +1104,7 @@ local function loadconfigs(file)
     -- if the global variable "loadConf" exists, then the replace DumbWRLD with the config
     if _G.loadConf then
         DumbWRLD = game:service'HttpService':JSONDecode(readfile("DumbWRLD/BSS_".._G.loadConf..".json"))
+        print('Loaded config! -> '.._G.loadConf)
         _G.loadConf = nil
     else
         -- if the global variable "loadConf" doesn't exist, then load the config given in argument 1
