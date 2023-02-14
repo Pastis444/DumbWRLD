@@ -225,6 +225,7 @@ local DumbWRLD = {
         popstarconvert = false,
         farmclosestleaf = false,
         farmbubbles = false,
+        autosprinkler = false,
         autodig = false,
         farmrares = false,
         rgbui = false,
@@ -285,6 +286,7 @@ local DumbWRLD = {
         tropicaldrink = false,
         purplepot = false,
         jellybean = false,
+        trainsnail = false,
         snowflake = false
     },
     vars = {
@@ -298,7 +300,10 @@ local DumbWRLD = {
         farmtype = "Walk",
         monstertimer = 3,
         Keybind = Enum.KeyCode.RightControl,
-        autodigmode = "Normal"
+        autodigmode = "Normal",
+        farmKeybind = Enum.KeyCode.U,
+        wsKeybind = Enum.KeyCode.K,
+        jpKeybind = Enum.KeyCode.L
     },
     dispensesettings = {
         blub = false,
@@ -913,91 +918,95 @@ information:CreateButton("Discord Invite", function() setclipboard("https://disc
 
 local farmo = farmtab:CreateSection("Farming")
 local fielddropdown = farmo:CreateDropdown("Field", fieldstable, function(String) DumbWRLD.vars.field = String end) fielddropdown:SetOption(fieldstable[1])
-convertatslider = farmo:CreateSlider("Convert At", 0, 100, 100, false, function(Value) DumbWRLD.vars.convertat = Value end)
-farmo:CreateToggle("Don't Convert Pollen", nil, function(State) DumbWRLD.toggles.noconvertpollen = State end)
-local autofarmtoggle = farmo:CreateToggle("Autofarm ⚙", nil, function(State) DumbWRLD.toggles.autofarm = State end) autofarmtoggle:CreateKeybind("U", function(Key) end)
+local convertatslider = farmo:CreateSlider("Convert At", 0, 100, 100, false, function(Value) DumbWRLD.vars.convertat = Value end)
+local convertpollentoggle = farmo:CreateToggle("Don't Convert Pollen", nil, function(State) DumbWRLD.toggles.noconvertpollen = State end)
+local autofarmtoggle = farmo:CreateToggle("Autofarm ⚙", nil, function(State) DumbWRLD.toggles.autofarm = State end)
+local autofarmtogglekeybind = autofarmtoggle:CreateKeybind(tostring(DumbWRLD.vars.farmKeybind):gsub("Enum.KeyCode.", ""), function(Key) DumbWRLD.vars.farmKeybind = Enum.KeyCode[Key] end)
 --farmo:CreateToggle("Convert After x Pop Star ⚙", nil, function(State) DumbWRLD.toggles.popstarconvert = State end):AddToolTip("Default x=3; You can change it in the Settings Tab")
-farmo:CreateToggle("Autodig", nil, function(State) DumbWRLD.toggles.autodig = State end)
-farmo:CreateToggle("Auto Sprinkler", nil, function(State) DumbWRLD.toggles.autosprinkler = State end)
-farmo:CreateToggle("Farm Bubbles", nil, function(State) DumbWRLD.toggles.farmbubbles = State end)
-farmo:CreateToggle("Farm Flames", nil, function(State) DumbWRLD.toggles.farmflame = State end)
-farmo:CreateToggle("Farm Coconuts & Shower", nil, function(State) DumbWRLD.toggles.farmcoco = State end)
-farmo:CreateToggle("Farm Precise Crosshairs", nil, function(State) DumbWRLD.toggles.collectcrosshairs = State end)
-farmo:CreateToggle("Farm Fuzzy Bombs", nil, function(State) DumbWRLD.toggles.farmfuzzy = State end)
-farmo:CreateToggle("Farm Under Balloons", nil, function(State) DumbWRLD.toggles.farmunderballoons = State end)
-farmo:CreateToggle("Farm Under Clouds", nil, function(State) DumbWRLD.toggles.farmclouds = State end)
+local autodigtoggle = farmo:CreateToggle("Autodig", nil, function(State) DumbWRLD.toggles.autodig = State end)
+local autosprinklertoggle = farmo:CreateToggle("Auto Sprinkler", nil, function(State) DumbWRLD.toggles.autosprinkler = State end)
+local farmbubblestoggle = farmo:CreateToggle("Farm Bubbles", nil, function(State) DumbWRLD.toggles.farmbubbles = State end)
+local farmflamestoggle = farmo:CreateToggle("Farm Flames", nil, function(State) DumbWRLD.toggles.farmflame = State end)
+local farmcoconutsandshowertoggle = farmo:CreateToggle("Farm Coconuts & Shower", nil, function(State) DumbWRLD.toggles.farmcoco = State end)
+local farmprecisecrosshairstoggle = farmo:CreateToggle("Farm Precise Crosshairs", nil, function(State) DumbWRLD.toggles.collectcrosshairs = State end)
+local farmfuzzybombstoggle = farmo:CreateToggle("Farm Fuzzy Bombs", nil, function(State) DumbWRLD.toggles.farmfuzzy = State end)
+local farmunderballoonstoggle = farmo:CreateToggle("Farm Under Balloons", nil, function(State) DumbWRLD.toggles.farmunderballoons = State end)
+local farmundercloudstoggle = farmo:CreateToggle("Farm Under Clouds", nil, function(State) DumbWRLD.toggles.farmclouds = State end)
 --farmo:CreateToggle("Farm Closest Leaves", nil, function(State) DumbWRLD.toggles.farmclosestleaf = State end)
 
 local farmt = farmtab:CreateSection("Farming")
-farmt:CreateToggle("Auto Dispenser ⚙", nil, function(State) DumbWRLD.toggles.autodispense = State end)
-farmt:CreateToggle("Auto Field Boosters ⚙", nil, function(State) DumbWRLD.toggles.autoboosters = State end)
-farmt:CreateToggle("Auto Wealth Clock", nil, function(State) DumbWRLD.toggles.clock = State end)
-farmt:CreateToggle("Auto Gingerbread Bears", nil, function(State) DumbWRLD.toggles.collectgingerbreads = State end)
-farmt:CreateToggle("Auto Samovar", nil, function(State) DumbWRLD.toggles.autosamovar = State end)
-farmt:CreateToggle("Auto Stockings", nil, function(State) DumbWRLD.toggles.autostockings = State end)
-farmt:CreateToggle("Auto Planters", nil, function(State) DumbWRLD.toggles.autoplanters = State end):AddToolTip("Will re-plant your planters after converting, if they hit x%")
-farmt:CreateToggle("Auto Honey Candles", nil, function(State) DumbWRLD.toggles.autocandles = State end)
-farmt:CreateToggle("Auto Beesmas Feast", nil, function(State) DumbWRLD.toggles.autofeast = State end)
-farmt:CreateToggle("Auto Honey Wreath", nil, function(State) DumbWRLD.toggles.autohoneywreath = State end):AddToolTip("Will go to Honey Wreath when you have a full bag")
-farmt:CreateToggle("Auto Onett's Lid Art", nil, function(State) DumbWRLD.toggles.autoonettart = State end)
-farmt:CreateToggle("Auto Free Antpasses", nil, function(State) DumbWRLD.toggles.freeantpass = State end)
-farmt:CreateToggle("Farm Sprouts", nil, function(State) DumbWRLD.toggles.farmsprouts = State end)
-farmt:CreateToggle("Farm Puffshrooms", nil, function(State) DumbWRLD.toggles.farmpuffshrooms = State end)
-farmt:CreateToggle("Farm Snowflakes ⚠️", nil, function(State) DumbWRLD.toggles.farmsnowflakes = State end)
-farmt:CreateToggle("Teleport To Rares ⚠️", nil, function(State) DumbWRLD.toggles.farmrares = State end)
-farmt:CreateToggle("Auto Accept/Confirm Quests ⚙", nil, function(State) DumbWRLD.toggles.autoquest = State end)
-farmt:CreateToggle("Auto Do Quests ⚙", nil, function(State) DumbWRLD.toggles.autodoquest = State end)
-farmt:CreateToggle("Auto Honeystorm", nil, function(State) DumbWRLD.toggles.honeystorm = State end)
+local autodispensertoggle = farmt:CreateToggle("Auto Dispenser ⚙", nil, function(State) DumbWRLD.toggles.autodispense = State end)
+local autofieldboosterstoggle = farmt:CreateToggle("Auto Field Boosters ⚙", nil, function(State) DumbWRLD.toggles.autoboosters = State end)
+local autowealthclocktoggle = farmt:CreateToggle("Auto Wealth Clock", nil, function(State) DumbWRLD.toggles.clock = State end)
+local autogingerbreadbearstoggle = farmt:CreateToggle("Auto Gingerbread Bears", nil, function(State) DumbWRLD.toggles.collectgingerbreads = State end)
+local autosamovartoggle = farmt:CreateToggle("Auto Samovar", nil, function(State) DumbWRLD.toggles.autosamovar = State end)
+local autostockingstoggle = farmt:CreateToggle("Auto Stockings", nil, function(State) DumbWRLD.toggles.autostockings = State end)
+local autoplanterstoggle = farmt:CreateToggle("Auto Planters ⚙", nil, function(State) DumbWRLD.toggles.autoplanters = State end):AddToolTip("Will re-plant your planters after converting, if they hit x%")
+local autohoneycandlestoggle = farmt:CreateToggle("Auto Honey Candles", nil, function(State) DumbWRLD.toggles.autocandles = State end)
+local autobeesmasfeasttoggle = farmt:CreateToggle("Auto Beesmas Feast", nil, function(State) DumbWRLD.toggles.autofeast = State end)
+local autohoneywreathtoggle = farmt:CreateToggle("Auto Honey Wreath", nil, function(State) DumbWRLD.toggles.autohoneywreath = State end):AddToolTip("Will go to Honey Wreath when you have a full bag")
+local autoonettslidarttoggle = farmt:CreateToggle("Auto Onett's Lid Art", nil, function(State) DumbWRLD.toggles.autoonettart = State end)
+local autofreeantpassestoggle = farmt:CreateToggle("Auto Free Antpasses", nil, function(State) DumbWRLD.toggles.freeantpass = State end)
+local farmsproutstoggle = farmt:CreateToggle("Farm Sprouts", nil, function(State) DumbWRLD.toggles.farmsprouts = State end)
+local farmpuffshroomstoggle = farmt:CreateToggle("Farm Puffshrooms", nil, function(State) DumbWRLD.toggles.farmpuffshrooms = State end)
+local farmsnowflakestoggle = farmt:CreateToggle("Farm Snowflakes ⚠️", nil, function(State) DumbWRLD.toggles.farmsnowflakes = State end)
+local teleporttorarestoggle = farmt:CreateToggle("Teleport To Rares ⚠️", nil, function(State) DumbWRLD.toggles.farmrares = State end)
+local autoacceptqueststoggle = farmt:CreateToggle("Auto Accept/Confirm Quests ⚙", nil, function(State) DumbWRLD.toggles.autoquest = State end)
+local autodoqueststoggle = farmt:CreateToggle("Auto Do Quests ⚙", nil, function(State) DumbWRLD.toggles.autodoquest = State end)
+local autohoneystormtoggle = farmt:CreateToggle("Auto Honeystorm", nil, function(State) DumbWRLD.toggles.honeystorm = State end)
 
 
 local mobkill = combtab:CreateSection("Combat")
-mobkill:CreateToggle("Train Crab", nil, function(State) if State then api.humanoidrootpart().CFrame = CFrame.new(-307.52117919922, 107.91863250732, 467.86791992188) end end)
-mobkill:CreateToggle("Train Snail", nil, function(State) fd = game.Workspace.FlowerZones['Stump Field'] if State then api.humanoidrootpart().CFrame = CFrame.new(fd.Position.X, fd.Position.Y-6, fd.Position.Z) else api.humanoidrootpart().CFrame = CFrame.new(fd.Position.X, fd.Position.Y+2, fd.Position.Z) end end)
-mobkill:CreateToggle("Kill Mondo", nil, function(State) DumbWRLD.toggles.killmondo = State end)
-mobkill:CreateToggle("Kill Vicious", nil, function(State) DumbWRLD.toggles.killvicious = State end)
-mobkill:CreateToggle("Kill Windy", nil, function(State) DumbWRLD.toggles.killwindy = State end)
-mobkill:CreateToggle("Auto Kill Mobs", nil, function(State) DumbWRLD.toggles.autokillmobs = State end):AddToolTip("Kills mobs after x pollen converting")
-mobkill:CreateToggle("Avoid Mobs", nil, function(State) DumbWRLD.toggles.avoidmobs = State end)
-mobkill:CreateToggle("Auto Ant", nil, function(State) DumbWRLD.toggles.autoant = State end):AddToolTip("You Need Spark Stuff 😋; Goes to Ant Challenge after pollen converting")
-mobkill:CreateToggle("Auto Ant On Quest", nil, function(State) DumbWRLD.toggles.autoantonquest = State end):AddToolTip("You Need Spark Stuff 😋; Goes to Ant Challenge after pollen converting")
-mobkill:CreateToggle("Auto Demon Mask", nil, function(State) DumbWRLD.toggles.demonmask = State end):AddToolTip("You Need Demon Mask 😈; Equip Demon Mask to Kill Mob")
+local traincrabtoggle = mobkill:CreateToggle("Train Crab", nil, function(State) if State then api.humanoidrootpart().CFrame = CFrame.new(-307.52117919922, 107.91863250732, 467.86791992188) end DumbWRLD.toggles.traincrab = State end)
+local trainsnailtoggle = mobkill:CreateToggle("Train Snail", nil, function(State) fd = game.Workspace.FlowerZones['Stump Field'] if State then api.humanoidrootpart().CFrame = CFrame.new(fd.Position.X, fd.Position.Y-6, fd.Position.Z) else api.humanoidrootpart().CFrame = CFrame.new(fd.Position.X, fd.Position.Y+2, fd.Position.Z) end DumbWRLD.toggles.trainsnail = State end)
+local killmondotoggle = mobkill:CreateToggle("Kill Mondo", nil, function(State) DumbWRLD.toggles.killmondo = State end)
+local killvicioustoggle = mobkill:CreateToggle("Kill Vicious", nil, function(State) DumbWRLD.toggles.killvicious = State end)
+local killwindytoggle = mobkill:CreateToggle("Kill Windy", nil, function(State) DumbWRLD.toggles.killwindy = State end)
+local autokillmobstoggle = mobkill:CreateToggle("Auto Kill Mobs", nil, function(State) DumbWRLD.toggles.autokillmobs = State end):AddToolTip("Kills mobs after x pollen converting")
+local avoidmobstoggle = mobkill:CreateToggle("Avoid Mobs", nil, function(State) DumbWRLD.toggles.avoidmobs = State end)
+local autoanttoggle = mobkill:CreateToggle("Auto Ant", nil, function(State) DumbWRLD.toggles.autoant = State end):AddToolTip("You Need Spark Stuff 😋; Goes to Ant Challenge after pollen converting")
+local autoantonquesttoggle = mobkill:CreateToggle("Auto Ant On Quest", nil, function(State) DumbWRLD.toggles.autoantonquest = State end):AddToolTip("You Need Spark Stuff 😋; Goes to Ant Challenge after pollen converting")
+local autodemonmasktoggle = mobkill:CreateToggle("Auto Demon Mask", nil, function(State) DumbWRLD.toggles.demonmask = State end):AddToolTip("You Need Demon Mask 😈; Equip Demon Mask to Kill Mob")
 
 
 local amks = combtab:CreateSection("Auto Kill Mobs Settings")
-amks:CreateTextBox('Kill Mobs After x Convertions', 'default = 3', true, function(Value) DumbWRLD.vars.monstertimer = tonumber(Value) end)
+local killmobsafterxconvertionstextbox = amks:CreateTextBox('Kill Mobs After x Convertions', 'default = 3', true, function(Value) DumbWRLD.vars.monstertimer = tonumber(Value) end)
 
 
 local wayp = wayptab:CreateSection("Waypoints")
 wayp:CreateDropdown("Field Teleports", fieldstable, function(Option) game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game:GetService("Workspace").FlowerZones:FindFirstChild(Option).CFrame end)
 wayp:CreateDropdown("Monster Teleports", spawnerstable, function(Option) d = game:GetService("Workspace").MonsterSpawners:FindFirstChild(Option) game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(d.Position.X, d.Position.Y+3, d.Position.Z) end)
 wayp:CreateDropdown("Toys Teleports", toystable, function(Option) d = game:GetService("Workspace").Toys:FindFirstChild(Option).Platform game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(d.Position.X, d.Position.Y+3, d.Position.Z) end)
-wayp:CreateButton("Teleport to hive", function() game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game:GetService("Players").LocalPlayer.SpawnPos.Value end)
+local teleporttohivebutton = wayp:CreateButton("Teleport to hive", function() game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game:GetService("Players").LocalPlayer.SpawnPos.Value end)
 
 local useitems = itemtab:CreateSection("Use Items")
-useitems:CreateButton("Use All Buffs ⚠️",function() for i,v in pairs(buffTable) do  game:GetService("ReplicatedStorage").Events.PlayerActivesCommand:FireServer({["Name"]=v}) end end)
+local useallbuffsbutton = useitems:CreateButton("Use All Buffs ⚠️",function() for i,v in pairs(buffTable) do  game:GetService("ReplicatedStorage").Events.PlayerActivesCommand:FireServer({["Name"]=v}) end end)
 useitems:CreateLabel("")
-for i,v in pairs(buffTable) do useitems:CreateButton("Use "..v,function() game:GetService("ReplicatedStorage").Events.PlayerActivesCommand:FireServer({["Name"]=v}) end) end
+local dynamicitemsbuttons = {}
+for i,v in pairs(buffTable) do dynamicitemsbuttons["use"..string.gsub(string.lower(v), "%s", "")] = useitems:CreateButton("Use "..v,function() game:GetService("ReplicatedStorage").Events.PlayerActivesCommand:FireServer({["Name"]=v}) end) end
 
 local itemt = itemtab:CreateSection("Auto Use Items")
-itemt:CreateToggle("Use Blue Extract", nil, function(State) DumbWRLD.toggles.blueextract = State end)
-itemt:CreateToggle("Use Red Extract", nil, function(State) DumbWRLD.toggles.redextract = State end)
-itemt:CreateToggle("Use Oil", nil, function(State) DumbWRLD.toggles.oil = State end)
-itemt:CreateToggle("Use Enzyme", nil, function(State) DumbWRLD.toggles.enzyme = State end)
-itemt:CreateToggle("Use Glue", nil, function(State) DumbWRLD.toggles.glue = State end)
-itemt:CreateToggle("Use Glitter", nil, function(State) DumbWRLD.toggles.glitter = State end)
-itemt:CreateToggle("Use Field Dice", nil, function(State) DumbWRLD.toggles.fielddice = State end):AddToolTip("WARNING : Can use a LOT of Field Dice (because it's RNG)")
+local useblueextracttoggle = itemt:CreateToggle("Use Blue Extract", nil, function(State) DumbWRLD.toggles.blueextract = State end)
+local useredextracttoggle = itemt:CreateToggle("Use Red Extract", nil, function(State) DumbWRLD.toggles.redextract = State end)
+local useoiltoggle = itemt:CreateToggle("Use Oil", nil, function(State) DumbWRLD.toggles.oil = State end)
+local useenzymetoggle = itemt:CreateToggle("Use Enzyme", nil, function(State) DumbWRLD.toggles.enzyme = State end)
+local usegluetoggle = itemt:CreateToggle("Use Glue", nil, function(State) DumbWRLD.toggles.glue = State end)
+local useglittertoggle = itemt:CreateToggle("Use Glitter", nil, function(State) DumbWRLD.toggles.glitter = State end)
+local usefielddicetoggle = itemt:CreateToggle("Use Field Dice", nil, function(State) DumbWRLD.toggles.fielddice = State end):AddToolTip("WARNING : Can use a LOT of Field Dice (because it's RNG)")
 local glitterdropdown = itemt:CreateDropdown("Field for Glitter and Filed Dice", fieldstable, function(String) extrasvars.field = String end) glitterdropdown:SetOption(fieldstable[2])
-itemt:CreateToggle("Use Tropical Drink", nil, function(State) DumbWRLD.toggles.tropicaldrink = State end)
-itemt:CreateToggle("Use Snowflake", nil, function(State) DumbWRLD.toggles.snowflake = State end)
-itemt:CreateToggle("Use Purple Potion", nil, function(State) DumbWRLD.toggles.purplepot = State end)
-itemt:CreateToggle("Use Jelly Beans", nil, function(State) DumbWRLD.toggles.jellybean = State end)
+local usetropicaldrinktoggle = itemt:CreateToggle("Use Tropical Drink", nil, function(State) DumbWRLD.toggles.tropicaldrink = State end)
+local usesnowflaketoggle = itemt:CreateToggle("Use Snowflake", nil, function(State) DumbWRLD.toggles.snowflake = State end)
+local usepurplepotiontoggle = itemt:CreateToggle("Use Purple Potion", nil, function(State) DumbWRLD.toggles.purplepot = State end)
+local usejellybeanstoggle = itemt:CreateToggle("Use Jelly Beans", nil, function(State) DumbWRLD.toggles.jellybean = State end)
 
 
 local miscc = misctab:CreateSection("Misc")
 miscc:CreateButton("Ant Challenge Semi-Godmode", function() api.tween(1, CFrame.new(93.4228, 32.3983, 553.128)) task.wait(1) game.ReplicatedStorage.Events.ToyEvent:FireServer("Ant Challenge") game.Players.LocalPlayer.Character.HumanoidRootPart.Position = Vector3.new(93.4228, 42.3983, 553.128) task.wait(2) game.Players.LocalPlayer.Character.Humanoid.Name = 1 local l = game.Players.LocalPlayer.Character["1"]:Clone() l.Parent = game.Players.LocalPlayer.Character l.Name = "Humanoid" task.wait() game.Players.LocalPlayer.Character["1"]:Destroy() api.tween(1, CFrame.new(93.4228, 32.3983, 553.128)) task.wait(8) api.tween(1, CFrame.new(93.4228, 32.3983, 553.128)) end)
-local wstoggle = miscc:CreateToggle("Walk Speed", nil, function(State) DumbWRLD.toggles.loopspeed = State end) wstoggle:CreateKeybind("K", function(Key) end)
-local jptoggle = miscc:CreateToggle("Jump Power", nil, function(State) DumbWRLD.toggles.loopjump = State end) jptoggle:CreateKeybind("L", function(Key) end)
-miscc:CreateToggle("Godmode", nil, function(State) DumbWRLD.toggles.godmode = State if State then bssapi:Godmode(true) else bssapi:Godmode(false) end end)
+local wstoggle = miscc:CreateToggle("Walk Speed", nil, function(State) DumbWRLD.toggles.loopspeed = State end)
+local wstogglekeybind = wstoggle:CreateKeybind(tostring(DumbWRLD.vars.wsKeybind):gsub("Enum.KeyCode.", ""), function(Key) DumbWRLD.vars.wsKeybind = Enum.KeyCode[Key] end)
+local jptoggle = miscc:CreateToggle("Jump Power", nil, function(State) DumbWRLD.toggles.loopjump = State end)
+local jptogglekeybind = jptoggle:CreateKeybind(tostring(DumbWRLD.vars.jpKeybind):gsub("Enum.KeyCode.", ""), function(Key) DumbWRLD.vars.jpKeybind = Enum.KeyCode[Key] end)
+local godmodetoggle = miscc:CreateToggle("Godmode", nil, function(State) DumbWRLD.toggles.godmode = State if State then bssapi:Godmode(true) else bssapi:Godmode(false) end end)
 local misco = misctab:CreateSection("Other")
 misco:CreateDropdown("Equip Accesories", accesoriestable, function(Option) local ohString1 = "Equip" local ohTable2 = { ["Mute"] = false, ["Type"] = Option, ["Category"] = "Accessory" } game:GetService("ReplicatedStorage").Events.ItemPackageEvent:InvokeServer(ohString1, ohTable2) end)
 misco:CreateDropdown("Equip Masks", masktable, function(Option) local ohString1 = "Equip" local ohTable2 = { ["Mute"] = false, ["Type"] = Option, ["Category"] = "Accessory" } game:GetService("ReplicatedStorage").Events.ItemPackageEvent:InvokeServer(ohString1, ohTable2) end)
@@ -1005,30 +1014,30 @@ misco:CreateDropdown("Equip Collectors", collectorstable, function(Option) local
 misco:CreateDropdown("Generate Amulet", {"Supreme Star Amulet", "Diamond Star Amulet", "Gold Star Amulet","Silver Star Amulet","Bronze Star Amulet","Moon Amulet"}, function(Option) local A_1 = Option.." Generator" local Event = game:GetService("ReplicatedStorage").Events.ToyEvent Event:FireServer(A_1) end)
 misco:CreateButton("Export Stats Table", function() local StatCache = require(game.ReplicatedStorage.ClientStatCache)writefile("Stats_"..api.nickname..".json", StatCache:Encode()) end)
 local miscd = misctab:CreateSection("Auto Donate")
-miscd:CreateToggle("Auto Cloud Vial", nil, function(State) DumbWRLD.toggles.autocloudvial = State end)
+local autocloudvialtoggle = miscd:CreateToggle("Auto Cloud Vial", nil, function(State) DumbWRLD.toggles.autocloudvial = State end)
 
 
 local extras = extrtab:CreateSection("Extras")
 extras:CreateButton("Hide nickname", function() loadstring(game:HttpGet("https://raw.githubusercontent.com/not-weuz/Lua/main/nicknamespoofer.lua"))()end)
 extras:CreateButton("Boost FPS", function()loadstring(game:HttpGet("https://raw.githubusercontent.com/not-weuz/Lua/main/fpsboost.lua"))()end)
 extras:CreateButton("Destroy Decals", function()loadstring(game:HttpGet("https://raw.githubusercontent.com/not-weuz/Lua/main/destroydecals.lua"))()end)
-extras:CreateTextBox("Glider Speed", "", true, function(Value) local StatCache = require(game.ReplicatedStorage.ClientStatCache) local stats = StatCache:Get() stats.EquippedParachute = "Glider" local module = require(game:GetService("ReplicatedStorage").Parachutes) local st = module.GetStat local glidersTable = getupvalues(st) glidersTable[1]["Glider"].Speed = Value setupvalue(st, st[1]'Glider', glidersTable) end)
-extras:CreateTextBox("Glider Float", "", true, function(Value) local StatCache = require(game.ReplicatedStorage.ClientStatCache) local stats = StatCache:Get() stats.EquippedParachute = "Glider" local module = require(game:GetService("ReplicatedStorage").Parachutes) local st = module.GetStat local glidersTable = getupvalues(st) glidersTable[1]["Glider"].Float = Value setupvalue(st, st[1]'Glider', glidersTable) end)
+local gliderspeedtextbox = extras:CreateTextBox("Glider Speed", "", true, function(Value) local StatCache = require(game.ReplicatedStorage.ClientStatCache) local stats = StatCache:Get() stats.EquippedParachute = "Glider" local module = require(game:GetService("ReplicatedStorage").Parachutes) local st = module.GetStat local glidersTable = getupvalues(st) glidersTable[1]["Glider"].Speed = Value setupvalue(st, st[1]'Glider', glidersTable) end)
+local gliderfloattextbox = extras:CreateTextBox("Glider Float", "", true, function(Value) local StatCache = require(game.ReplicatedStorage.ClientStatCache) local stats = StatCache:Get() stats.EquippedParachute = "Glider" local module = require(game:GetService("ReplicatedStorage").Parachutes) local st = module.GetStat local glidersTable = getupvalues(st) glidersTable[1]["Glider"].Float = Value setupvalue(st, st[1]'Glider', glidersTable) end)
 extras:CreateButton("Invisibility", function(State) api.teleport(CFrame.new(0,0,0)) wait(1) if game.Players.LocalPlayer.Character:FindFirstChild('LowerTorso') then Root = game.Players.LocalPlayer.Character.LowerTorso.Root:Clone() game.Players.LocalPlayer.Character.LowerTorso.Root:Destroy() Root.Parent = game.Players.LocalPlayer.Character.LowerTorso api.teleport(game:GetService("Players").LocalPlayer.SpawnPos.Value) end end)
-extras:CreateToggle("Float", nil, function(State) temptable.float = State end)
+local floattoggle = extras:CreateToggle("Float", nil, function(State) temptable.float = State end)
 
 
 local farmsettings = setttab:CreateSection("Autofarm Settings")
-farmsettings:CreateTextBox("Autofarming Walkspeed", "Default Value = 60", true, function(Value) DumbWRLD.vars.farmspeed = Value end)
-farmsettings:CreateToggle("^ Loop Speed On Autofarming",nil, function(State) DumbWRLD.toggles.loopfarmspeed = State end)
-farmsettings:CreateToggle("Don't Walk In Field",nil, function(State) DumbWRLD.toggles.farmflower = State end)
-farmsettings:CreateToggle("Convert Hive Balloon",nil, function(State) DumbWRLD.toggles.convertballoons = State end)
-farmsettings:CreateToggle("Don't Farm Tokens",nil, function(State) DumbWRLD.toggles.donotfarmtokens = State end)
-farmsettings:CreateToggle("Enable Token Blacklisting",nil, function(State) DumbWRLD.toggles.enabletokenblacklisting = State end)
+local autofarmingwalkspeedtextbox = farmsettings:CreateTextBox("Autofarming Walkspeed", "Default Value = 60", true, function(Value) DumbWRLD.vars.farmspeed = Value end)
+local loopspeedonautofarmingtoggle = farmsettings:CreateToggle("^ Loop Speed On Autofarming",nil, function(State) DumbWRLD.toggles.loopfarmspeed = State end)
+local dontwalkinfieldtoggle = farmsettings:CreateToggle("Don't Walk In Field",nil, function(State) DumbWRLD.toggles.farmflower = State end)
+local converthiveballoontoggle = farmsettings:CreateToggle("Convert Hive Balloon",nil, function(State) DumbWRLD.toggles.convertballoons = State end)
+local dontfarmtokenstoggle = farmsettings:CreateToggle("Don't Farm Tokens",nil, function(State) DumbWRLD.toggles.donotfarmtokens = State end)
+local enabletokenblacklistingtoggle = farmsettings:CreateToggle("Enable Token Blacklisting",nil, function(State) DumbWRLD.toggles.enabletokenblacklisting = State end)
 --farmsettings:CreateTextBox('Convert Pollen After x Pop Star', 'default = 3', true, function(Value) extrasvars.popstartimer = tonumber(Value) end)
-farmsettings:CreateSlider("Collect Planters At", 0, 100, 100, false, function(Value) DumbWRLD.planterat = Value end)
-farmsettings:CreateSlider("Walk Speed", 0, 120, 70, false, function(Value) DumbWRLD.vars.walkspeed = Value end)
-farmsettings:CreateSlider("Jump Power", 0, 120, 70, false, function(Value) DumbWRLD.vars.jumppower = Value end)
+local collectplantersatslider = farmsettings:CreateSlider("Collect Planters At", 0, 100, 100, false, function(Value) DumbWRLD.planterat = Value end)
+local walkspeedslider = farmsettings:CreateSlider("Walk Speed", 0, 120, 70, false, function(Value) DumbWRLD.vars.walkspeed = Value end)
+local jumppowerslider = farmsettings:CreateSlider("Jump Power", 0, 120, 70, false, function(Value) DumbWRLD.vars.jumppower = Value end)
 local raresettings = setttab:CreateSection("Tokens Settings")
 raresettings:CreateTextBox("Asset ID", 'rbxassetid', false, function(Value) rarename = Value end)
 raresettings:CreateButton("Add Token To Rares List", function()
@@ -1054,17 +1063,18 @@ end)
 raresettings:CreateDropdown("Tokens Blacklist", DumbWRLD.bltokens, function(Option) end)
 raresettings:CreateDropdown("Rares List", DumbWRLD.rares, function(Option) end)
 local dispsettings = setttab:CreateSection("Auto Dispenser & Auto Boosters Settings")
-dispsettings:CreateToggle("Royal Jelly Dispenser", nil, function(State) DumbWRLD.dispensesettings.rj = not DumbWRLD.dispensesettings.rj end)
-dispsettings:CreateToggle("Blueberry Dispenser", nil,  function(State) DumbWRLD.dispensesettings.blub = not DumbWRLD.dispensesettings.blub end)
-dispsettings:CreateToggle("Strawberry Dispenser", nil,  function(State) DumbWRLD.dispensesettings.straw = not DumbWRLD.dispensesettings.straw end)
-dispsettings:CreateToggle("Treat Dispenser", nil,  function(State) DumbWRLD.dispensesettings.treat = not DumbWRLD.dispensesettings.treat end)
-dispsettings:CreateToggle("Coconut Dispenser", nil,  function(State) DumbWRLD.dispensesettings.coconut = not DumbWRLD.dispensesettings.coconut end)
-dispsettings:CreateToggle("Glue Dispenser", nil,  function(State) DumbWRLD.dispensesettings.glue = not DumbWRLD.dispensesettings.glue end)
-dispsettings:CreateToggle("Mountain Top Booster", nil,  function(State) DumbWRLD.dispensesettings.white = not DumbWRLD.dispensesettings.white end)
-dispsettings:CreateToggle("Blue Field Booster", nil,  function(State) DumbWRLD.dispensesettings.blue = not DumbWRLD.dispensesettings.blue end)
-dispsettings:CreateToggle("Red Field Booster", nil,  function(State) DumbWRLD.dispensesettings.red = not DumbWRLD.dispensesettings.red end)
+local royaljellydispensertoggle = dispsettings:CreateToggle("Royal Jelly Dispenser", nil, function(State) DumbWRLD.dispensesettings.rj = not DumbWRLD.dispensesettings.rj end)
+local blueberrydispensertoggle = dispsettings:CreateToggle("Blueberry Dispenser", nil,  function(State) DumbWRLD.dispensesettings.blub = not DumbWRLD.dispensesettings.blub end)
+local strawberrydispensertoggle = dispsettings:CreateToggle("Strawberry Dispenser", nil,  function(State) DumbWRLD.dispensesettings.straw = not DumbWRLD.dispensesettings.straw end)
+local treatdispensertoggle = dispsettings:CreateToggle("Treat Dispenser", nil,  function(State) DumbWRLD.dispensesettings.treat = not DumbWRLD.dispensesettings.treat end)
+local coconutdispensertoggle = dispsettings:CreateToggle("Coconut Dispenser", nil,  function(State) DumbWRLD.dispensesettings.coconut = not DumbWRLD.dispensesettings.coconut end)
+local gluedispensertoggle = dispsettings:CreateToggle("Glue Dispenser", nil,  function(State) DumbWRLD.dispensesettings.glue = not DumbWRLD.dispensesettings.glue end)
+local mountaintopboostertoggle = dispsettings:CreateToggle("Mountain Top Booster", nil,  function(State) DumbWRLD.dispensesettings.white = not DumbWRLD.dispensesettings.white end)
+local bluefieldboostertoggle = dispsettings:CreateToggle("Blue Field Booster", nil,  function(State) DumbWRLD.dispensesettings.blue = not DumbWRLD.dispensesettings.blue end)
+local redfieldboostertoggle = dispsettings:CreateToggle("Red Field Booster", nil,  function(State) DumbWRLD.dispensesettings.red = not DumbWRLD.dispensesettings.red end)
 local guisettings = setttab:CreateSection("GUI Settings")
-local uitoggle = guisettings:CreateToggle("UI Toggle", nil, function(State) Window:Toggle(State) end) uitoggle:CreateKeybind(tostring(DumbWRLD.vars.Keybind):gsub("Enum.KeyCode.", ""), function(Key) DumbWRLD.vars.Keybind = Enum.KeyCode[Key] end) uitoggle:SetState(true)
+local uitoggle = guisettings:CreateToggle("UI Toggle", nil, function(State) Window:Toggle(State) end)
+local uitogglekeybind = uitoggle:CreateKeybind(tostring(DumbWRLD.vars.Keybind):gsub("Enum.KeyCode.", ""), function(Key) DumbWRLD.vars.Keybind = Enum.KeyCode[Key] end) uitoggle:SetState(true)
 guisettings:CreateColorpicker("UI Color", function(Color) Window:ChangeColor(Color) end)
 local themes = guisettings:CreateDropdown("Image", {"Default","Hearts","Abstract","Hexagon","Circles","Lace With Flowers","Floral"}, function(Name) if Name == "Default" then Window:SetBackground("2151741365") elseif Name == "Hearts" then Window:SetBackground("6073763717") elseif Name == "Abstract" then Window:SetBackground("6073743871") elseif Name == "Hexagon" then Window:SetBackground("6073628839") elseif Name == "Circles" then Window:SetBackground("6071579801") elseif Name == "Lace With Flowers" then Window:SetBackground("6071575925") elseif Name == "Floral" then Window:SetBackground("5553946656") end end)themes:SetOption("Default")
 function killscript()
@@ -1079,68 +1089,259 @@ function killscript()
     -- setting the DumbWRLDState to false
     _G.DumbWRLDState = false
     -- killing the gui
+    Window:Toggle(false)
     game:GetService("CoreGui"):FindFirstChild(_G.windowname):Destroy()
 end
 guisettings:CreateButton("Kill GUI", function() killscript() end)
 local fieldsettings = setttab:CreateSection("Fields Settings")
-fieldsettings:CreateDropdown("Best White Field", temptable.whitefields, function(Option) DumbWRLD.bestfields.white = Option end)
-fieldsettings:CreateDropdown("Best Red Field", temptable.redfields, function(Option) DumbWRLD.bestfields.red = Option end)
-fieldsettings:CreateDropdown("Best Blue Field", temptable.bluefields, function(Option) DumbWRLD.bestfields.blue = Option end)
+local bestwhitefielddropdown = fieldsettings:CreateDropdown("Best White Field", temptable.whitefields, function(Option) DumbWRLD.bestfields.white = Option end)
+local bestredfielddropdown = fieldsettings:CreateDropdown("Best Red Field", temptable.redfields, function(Option) DumbWRLD.bestfields.red = Option end)
+local bestbluefielddropdown = fieldsettings:CreateDropdown("Best Blue Field", temptable.bluefields, function(Option) DumbWRLD.bestfields.blue = Option end)
 fieldsettings:CreateDropdown("Field", fieldstable, function(Option) temptable.blackfield = Option end)
 fieldsettings:CreateButton("Add Field To Blacklist", function() table.insert(DumbWRLD.blacklistedfields, temptable.blackfield) game:GetService("CoreGui"):FindFirstChild(_G.windowname).Main:FindFirstChild("Blacklisted Fields D",true):Destroy() fieldsettings:CreateDropdown("Blacklisted Fields", DumbWRLD.blacklistedfields, function(Option) end) end)
 fieldsettings:CreateButton("Remove Field From Blacklist", function() table.remove(DumbWRLD.blacklistedfields, api.tablefind(DumbWRLD.blacklistedfields, temptable.blackfield)) game:GetService("CoreGui"):FindFirstChild(_G.windowname).Main:FindFirstChild("Blacklisted Fields D",true):Destroy() fieldsettings:CreateDropdown("Blacklisted Fields", DumbWRLD.blacklistedfields, function(Option) end) end)
 fieldsettings:CreateDropdown("Blacklisted Fields", DumbWRLD.blacklistedfields, function(Option) end)
 local aqs = setttab:CreateSection("Auto Quest Settings")
-aqs:CreateDropdown("Do NPC Quests", {'All Quests', 'Bucko Bee', 'Brown Bear', 'Riley Bee', 'Polar Bear', 'Bee Bear (X-Mas Bear)'}, function(Option) if Option == 'Bee Bear (X-Mas Bear)' then DumbWRLD.vars.npcprefer = 'Snow Cub Reformation' else DumbWRLD.vars.npcprefer = Option end end)
-aqs:CreateToggle("Teleport To NPC", nil, function(State) DumbWRLD.toggles.tptonpc = State end)
+local donpcquestsdropdown = aqs:CreateDropdown("Do NPC Quests", {'All Quests', 'Bucko Bee', 'Brown Bear', 'Riley Bee', 'Polar Bear', 'Bee Bear (X-Mas Bear)'}, function(Option) if Option == 'Bee Bear (X-Mas Bear)' then DumbWRLD.vars.npcprefer = 'Snow Cub Reformation' else DumbWRLD.vars.npcprefer = Option end end)
+local teleporttonpctoggle = aqs:CreateToggle("Teleport To NPC", nil, function(State) DumbWRLD.toggles.tptonpc = State end)
 local pts = setttab:CreateSection("Autofarm Priority Tokens")
 pts:CreateTextBox("Asset ID", 'rbxassetid', false, function(Value) rarename = Value end)
 pts:CreateButton("Add Token To Priority List", function() table.insert(DumbWRLD.priority, rarename) game:GetService("CoreGui"):FindFirstChild(_G.windowname).Main:FindFirstChild("Priority List D",true):Destroy() pts:CreateDropdown("Priority List", DumbWRLD.priority, function(Option) end) end)
 pts:CreateButton("Remove Token From Priority List", function() table.remove(DumbWRLD.priority, api.tablefind(DumbWRLD.priority, rarename)) game:GetService("CoreGui"):FindFirstChild(_G.windowname).Main:FindFirstChild("Priority List D",true):Destroy() pts:CreateDropdown("Priority List", DumbWRLD.priority, function(Option) end) end)
 pts:CreateDropdown("Priority List", DumbWRLD.priority, function(Option) end)
 local DumbWRLDs = setttab:CreateSection("Configs")
-DumbWRLDs:CreateTextBox("Config Name", 'ex: stumpconfig', false, function(Value) temptable.configname = Value end)
+local confignametextbox = DumbWRLDs:CreateTextBox("Config Name", 'ex: stumpconfig', false, function(Value) temptable.configname = Value end)
+
+-- create a list of all the local variables ending in "toggle" for easier access
+
+local toggles = {
+    noconvertpollen = convertpollentoggle,
+    autofarm = autofarmtoggle,
+    autodig = autodigtoggle,
+    autosprinkler = autosprinklertoggle,
+    farmbubbles = farmbubblestoggle,
+    farmflame = farmflamestoggle,
+    farmcoco = farmcoconutsandshowertoggle,
+    collectcrosshairs = farmprecisecrosshairstoggle,
+    farmfuzzy = farmfuzzybombstoggle,
+    farmunderballoons = farmunderballoonstoggle,
+    farmclouds = farmundercloudstoggle,
+    autodispense = autodispensertoggle,
+    clock = autowealthclocktoggle,
+    collectgingerbreads = autogingerbreadbearstoggle,
+    autosamovar = autosamovartoggle,
+    autostockings = autostockingstoggle,
+    autoplanters = autoplanterstoggle,
+    autocandles = autohoneycandlestoggle,
+    autofeast = autobeesmasfeasttoggle,
+    autohoneywreath = autohoneywreathtoggle,
+    autoonettart = autoonettslidarttoggle,
+    freeantpass = autofreeantpassestoggle,
+    farmsprouts = farmsproutstoggle,
+    farmpuffshrooms = farmpuffshroomstoggle,
+    farmsnowflakes = farmsnowflakestoggle,
+    farmrares = teleporttorarestoggle,
+    autoquest = autoacceptqueststoggle,
+    autodoquest = autodoqueststoggle,
+    honeystorm = autohoneystormtoggle,
+    traincrab = traincrabtoggle,
+    trainsnail = trainsnailtoggle,
+    killmondo = killmondotoggle,
+    killvicious = killvicioustoggle,
+    killwindy = killwindytoggle,
+    autokillmobs = autokillmobstoggle,
+    avoidmobs = avoidmobstoggle,
+    autoant = autoanttoggle,
+    autoantonquest = autoantonquesttoggle,
+    demonmask = autodemonmasktoggle,
+    blueextract = useblueextracttoggle,
+    redextract = useredextracttoggle,
+    oil = useoiltoggle,
+    enzyme = useenzymetoggle,
+    glue = usegluetoggle,
+    glitter = useglittertoggle,
+    fielddice = usefielddicetoggle,
+    tropicaldrink = usetropicaldrinktoggle,
+    snowflake = usesnowflaketoggle,
+    purplepot = usepurplepotiontoggle,
+    jellybean = usejellybeanstoggle,
+    loopspeed = wstoggle,
+    loopjump = jptoggle,
+    godmode = godmodetoggle,
+    autocloudvial = autocloudvialtoggle,
+    float = floattoggle,
+    loopfarmspeed = loopspeedonautofarmingtoggle,
+    farmflower = dontwalkinfieldtoggle,
+    convertballoons = converthiveballoontoggle,
+    donotfarmtokens = dontfarmtokenstoggle,
+    enabletokenblacklisting = enabletokenblacklistingtoggle,
+    -- the dispensers are not in DumbWRLD.toggles because they are in DumbWRLD.dispensers, so i add _dispensesettings to the end of the variable name
+    -- like a reverse domain and i check if the variable name ends in _dispensesettings in the update gui function
+    rj_dispensesettings = royaljellydispensertoggle,
+    blub_dispensesettings = blueberrydispensertoggle,
+    straw_dispensesettings = strawberrydispensertoggle,
+    treat_dispensesettings = treatdispensertoggle,
+    coconut_dispensesettings = coconutdispensertoggle,
+    glue_dispensesettings = gluedispensertoggle,
+    white_dispensesettings = mountaintopboostertoggle,
+    blue_dispensesettings = bluefieldboostertoggle,
+    red_dispensesettings = redfieldboostertoggle,
+    tptonpc = teleporttonpctoggle
+}
+
+-- create a list of all the local variables ending in "dropdown" for easier access
+
+local dropdowns = {
+    field_vars = fielddropdown,
+    field_extrasvars = glitterdropdown,
+    white_bestfields = bestwhitefielddropdown,
+    blue_bestfields = bestbluefielddropdown,
+    red_bestfields = bestredfielddropdown,
+    npcprefer_vars = donpcquestsdropdown
+}
+
+-- create a list of all the local variables ending in "textbox" for easier access
+
+local textboxes = {
+    monstertimer_vars = killmobsafterxconvertionstextbox,
+    farmspeed_vars = autofarmingwalkspeedtextbox,
+    configname_temptable = confignametextbox
+}
+
+-- create a list of all the local variables ending in "slider" for easier access
+
+local sliders = {
+    convertat_vars = convertatslider,
+    planterat_root = collectplantersatslider,
+    walkspeed_vars = walkspeedslider,
+    jumppower_vars = jumppowerslider,
+}
+
+-- create a list of all the local variables ending in "keybind" for easier access
+
+local keybinds = {
+    farmKeybind_vars = autofarmtogglekeybind,
+    wsKeybind_vars = wstogglekeybind,
+    jpKeybind_vars = jptogglekeybind,
+    Keybind_vars = uitogglekeybind,
+}
 
 local function loadconfigs(file)
-    DumbWRLD = game:service'HttpService':JSONDecode(readfile("DumbWRLD/BSS_"..file..".json"))
-    print("Loaded config: "..file)
-    -- update the gui
-    for i,v in pairs(DumbWRLD.toggles) do
-        if type(DumbWRLD.toggles[i]) == "boolean" then
-            library:ChangeToggleState(i, v)
-        end
-    end
-    for i,v in pairs(DumbWRLD.bestfields) do
-        -- check if the value is a string
-        if type(DumbWRLD.bestfields[i]) == "string" then
-            library:ChangeDropdownValue(i, v)
-        end
-    end
-    for i,v in pairs(DumbWRLD.vars) do
-        -- check if the value is a string
-        if type(DumbWRLD.vars[i]) == "string" then
-            library:ChangeDropdownValue(i, v)
-        -- check if the value is a number
-        elseif type(DumbWRLD.vars[i]) == "number" then
-            -- if the index is "farmspeed" or "monstertimer" then change the textbox value
-            if i == "farmspeed" or i == "monstertimer" then
-                library:ChangeTextBoxValue(i, v)
-            else
-                -- if the index is not "farmspeed" or "monstertimer" then change the slider value
-                library:ChangeSliderValue(i, v)
+    local config = game:service'HttpService':JSONDecode(readfile("DumbWRLD/BSS_"..file..".json"))
+    for i,v in pairs(config) do
+        if type(config[i]) == "table" then
+            for a,b in pairs(config[i]) do
+                DumbWRLD[i][a] = b
             end
-        -- check if the value is a keybind
-        elseif type(DumbWRLD.vars[i]) == "table" then
-            library:ChangeKeybindValue(i, v)
+        else
+            DumbWRLD[i] = v
         end
     end
-    for i,v in pairs(DumbWRLD.dispensesettings) do
-        -- check if the value is a boolean
-        if type(DumbWRLD.dispensesettings[i]) == "boolean" then
-            library:ChangeToggleState(i, v)
+
+    -- update gui
+
+    -- updating the togglable gui elements
+    for i,v in pairs(toggles) do
+        -- if the variable name ends in _dispensesettings, then it is a dispenser
+        if i:sub(-16) == "_dispensesettings" then
+            -- get the dispenser name
+            local dispenser = i:sub(1,-17)
+            -- get the dispenser settings
+            local settings = DumbWRLD.dispensers[dispenser]
+            -- update the gui
+            if settings then
+                v:SetState(true)
+            end
+        else
+            if DumbWRLD.toggles[i] then
+                v:SetState(true)
+            end
         end
     end
-    library:ChangeSliderValue("planterat", DumbWRLD.planterat)
+
+    -- updating the dropdown gui elements
+    for i,v in pairs(dropdowns) do
+        -- if the variable name ends in _extrasvars, then it is in the extrasvars table
+        if i:sub(-11) == "_extrasvars" then
+            -- get the variable name
+            local var = i:sub(1,-12)
+            -- get the variable value
+            local value = extrasvars[var]
+            -- update the gui
+            v:SetOption(value)
+            --if the variable name ends in _vars, then it is in the vars table
+        elseif i:sub(-6) == "_vars" then
+            -- get the variable name
+            local var = i:sub(1,-7)
+            -- get the variable value
+            local value = DumbWRLD.vars[var]
+            -- update the gui
+            v:SetOption(value)
+        -- if the variable name ends in _bestfields, then it is in the bestfields table
+        elseif i:sub(-12) == "_bestfields" then
+            -- get the variable name
+            local var = i:sub(1,-13)
+            -- get the variable value
+            local value = DumbWRLD.bestfields[var]
+            -- update the gui
+            v:SetOption(value)
+        end
+    end
+
+    -- updating the textbox gui elements
+    for i,v in pairs(textboxes) do
+        -- if the variable name ends in _vars, then it is in the vars table
+        if i:sub(-6) == "_vars" then
+            -- get the variable name
+            local var = i:sub(1,-7)
+            -- get the variable value
+            local value = DumbWRLD.vars[var]
+            -- update the gui
+            v:SetValue(value)
+        -- if the variable name ends in _temptable, then it is in the temptable table
+        elseif i:sub(-11) == "_temptable" then
+            -- get the variable name
+            local var = i:sub(1,-12)
+            -- get the variable value
+            local value = temptable[var]
+            -- update the gui
+            v:SetValue(value)
+        end
+    end
+
+    -- updating the slider gui elements
+    for i,v in pairs(sliders) do
+        -- if the variable name ends in _vars, then it is in the vars table
+        if i:sub(-6) == "_vars" then
+            -- get the variable name
+            local var = i:sub(1,-7)
+            -- get the variable value
+            local value = DumbWRLD.vars[var]
+            -- update the gui
+            v:SetValue(value)
+        -- if the variable name ends in _root, then it is in the root table
+        elseif i:sub(-6) == "_root" then
+            -- get the variable name
+            local var = i:sub(1,-7)
+            -- get the variable value
+            local value = DumbWRLD[var]
+            -- update the gui
+            v:SetValue(value)
+        end
+    end
+
+    -- updating the keybind gui elements
+    for i,v in pairs(keybinds) do
+        -- if the variable name ends in _vars, then it is in the vars table
+        if i:sub(-6) == "_vars" then
+            -- get the variable name
+            local var = i:sub(1,-7)
+            -- get the variable value
+            local value = DumbWRLD.vars[var]
+            -- update the gui
+            v:SetBind(tostring(value):gsub("Enum.KeyCode.",""))
+        end
+    end
 end
 DumbWRLDs:CreateButton("Load Config", function() loadconfigs(temptable.configname) end)
 DumbWRLDs:CreateButton("Save Config", function() writefile("DumbWRLD/BSS_"..temptable.configname..".json",game:service'HttpService':JSONEncode(DumbWRLD)) end)
