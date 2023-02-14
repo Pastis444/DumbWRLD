@@ -1142,9 +1142,6 @@ local function loadconfigs(file)
     end
     library:ChangeSliderValue("planterat", DumbWRLD.planterat)
 end
-if _G.loadConf then
-    loadconfigs(_G.loadConf)
-end
 DumbWRLDs:CreateButton("Load Config", function() loadconfigs(temptable.configname) end)
 DumbWRLDs:CreateButton("Save Config", function() writefile("DumbWRLD/BSS_"..temptable.configname..".json",game:service'HttpService':JSONEncode(DumbWRLD)) end)
 DumbWRLDs:CreateButton("Reset Config", function() DumbWRLD = defaultDumbWRLD end)
@@ -1699,7 +1696,7 @@ task.spawn(function() while task.wait() do
 end end)
 
 hives = game.Workspace.Honeycombs:GetChildren() for i = #hives, 1, -1 do  v = game.Workspace.Honeycombs:GetChildren()[i] if v.Owner.Value == nil then game.ReplicatedStorage.Events.ClaimHive:FireServer(v.HiveID.Value) end end
-if _G.autoload then if isfile("DumbWRLD/BSS_".._G.autoload..".json") then DumbWRLD = game:service'HttpService':JSONDecode(readfile("DumbWRLD/BSS_".._G.autoload..".json")) end end
+if _G.autoload then if isfile("DumbWRLD/BSS_".._G.autoload..".json") then loadconfigs(_G.autoload) end end
 for _, part in next, workspace:FindFirstChild("FieldDecos"):GetDescendants() do if part:IsA("BasePart") then part.CanCollide = false part.Transparency = part.Transparency < 0.5 and 0.5 or part.Transparency task.wait() end end
 for _, part in next, workspace:FindFirstChild("Decorations"):GetDescendants() do if part:IsA("BasePart") and (part.Parent.Name == "Bush" or part.Parent.Name == "Blue Flower") then part.CanCollide = false part.Transparency = part.Transparency < 0.5 and 0.5 or part.Transparency task.wait() end end
 for i,v in next, workspace.Decorations.Misc:GetDescendants() do if v.Parent.Name == "Mushroom" then v.CanCollide = false v.Transparency = 0.5 end end
