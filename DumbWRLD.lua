@@ -1247,7 +1247,7 @@ local function loadconfigs(file)
             -- get the dispenser name
             local dispenser = i:sub(1,-17)
             -- get the dispenser settings
-            local settings = DumbWRLD.dispensers[dispenser]
+            local settings = DumbWRLD.dispensesettings[dispenser]
             -- update the gui
             if settings then
                 v:SetState(true)
