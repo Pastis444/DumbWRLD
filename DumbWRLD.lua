@@ -882,9 +882,8 @@ function makequests()
 end
 
 local Config = { WindowName = "🌘  DumbWRLD v"..temptable.version, Color = Color3.fromRGB(164, 84, 255)}
-print(f"Loading {Config.WindowName}, {library}")
+print(f"Loading {Config.WindowName}...")
 local Window = library:CreateWindow(Config, game:GetService("CoreGui"))
-print(f"Loading Stage 2, {library}")
 
 local hometab = Window:CreateTab("Home")
 local farmtab = Window:CreateTab("Farming")
