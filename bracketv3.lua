@@ -329,15 +329,6 @@ function Library:CreateWindow(Config, Parent)
 					end
 				end
 
-				-- Global function to get the value of a textbox
-				function Library:ChangeTextBoxValue(Name, Value)
-					for i,v in pairs(Section.Container:GetChildren()) do
-						if v.Name == Name .. " T" then
-							v.Background.Input.Text = Value
-						end
-					end
-				end
-
 				return TextBoxInit
 			end
 			function SectionInit:CreateToggle(Name, Default, Callback)
@@ -366,15 +357,6 @@ function Library:CreateWindow(Config, Parent)
 					ToggleState = not ToggleState
 					SetState(ToggleState)
 				end)
-
-				-- Global function to change the state of a toggle
-				function Library:ChangeToggleState(Name, State)
-					for i,v in pairs(Library.ColorTable) do
-						if v.Name == Name .. " T" then
-							SetState(State)
-						end
-					end
-				end
 
 				function ToggleInit:AddToolTip(Name)
 					if tostring(Name):gsub(" ", "") ~= "" then
@@ -457,17 +439,6 @@ function Library:CreateWindow(Config, Parent)
 
 					return KeybindInit
 				end
-
-				-- Global function to change the keybind of a toggle
-				function Library:ChangeKeybindValue(Name, Keybind)
-					for i,v in pairs(Section.Container:GetChildren()) do
-						if v.Name == Name .. " T" then
-							v.Keybind.Text = "[ " .. Keybind .. " ]"
-						end
-					end
-				end
-
-				return ToggleInit
 			end
 			function SectionInit:CreateSlider(Name, Min, Max, Default, Precise, Callback)
 				local DefaultLocal = Default or 50
@@ -579,15 +550,6 @@ function Library:CreateWindow(Config, Parent)
 					return GlobalSliderValue
 				end
 
-				-- Global function to set the value of the slider
-				function Library:ChangeSliderValue(SliderName, Value)
-					for i,v in pairs(Section.Container:GetChildren()) do
-						if v.Name == SliderName .. " S" then
-							SetValue(Value)
-						end
-					end
-				end
-
 				return SliderInit
 			end
 			function SectionInit:CreateDropdown(Name, OptionTable, Callback, InitialValue)
@@ -684,20 +646,6 @@ function Library:CreateWindow(Config, Parent)
 					end
 					Dropdown.Container.Holder.Size = UDim2.new(1,-5,0,Dropdown.Container.Holder.Container.ListLayout.AbsoluteContentSize.Y)
 					Dropdown.Size = UDim2.new(1,-10,0,Dropdown.Container.Holder.Container.ListLayout.AbsoluteContentSize.Y + Dropdown.Title.TextBounds.Y + 30)
-				end
-
-				-- Global function to set the dropdown option
-				function Library:ChangeDropdownValue(DropdownName, OptionName)
-					for _, DropdownItem in pairs(Section.Container:GetChildren()) do
-						if DropdownItem:IsA("Frame") and string.find(DropdownItem.Name, DropdownName) then
-							for _,Option in pairs(DropdownItem.Container.Holder.Container:GetChildren()) do
-								if Option:IsA("TextButton") and string.find(Option.Name, OptionName) then
-									DropdownItem.Container.Value.Text = Option.Name
-									Callback(OptionName)
-								end
-							end
-						end
-					end
 				end
 
 				if InitialValue then
@@ -835,5 +783,56 @@ function Library:CreateWindow(Config, Parent)
 	end
 	return WindowInit
 end
+-- Global function to get the value of a textbox
+function Library:ChangeTextBoxValue(Name, Value)
+	for i,v in pairs(Section.Container:GetChildren()) do
+		if v.Name == Name .. " T" then
+			v.Background.Input.Text = Value
+		end
+	end
+end
+
+-- Global function to change the state of a toggle
+function Library:ChangeToggleState(Name, State)
+	for i,v in pairs(Library.ColorTable) do
+		if v.Name == Name .. " T" then
+			SetState(State)
+		end
+	end
+end
+
+-- Global function to set the dropdown option
+function Library:ChangeDropdownValue(DropdownName, OptionName)
+	for _, DropdownItem in pairs(Section.Container:GetChildren()) do
+		if DropdownItem:IsA("Frame") and string.find(DropdownItem.Name, DropdownName) then
+			for _,Option in pairs(DropdownItem.Container.Holder.Container:GetChildren()) do
+				if Option:IsA("TextButton") and string.find(Option.Name, OptionName) then
+					DropdownItem.Container.Value.Text = Option.Name
+					Callback(OptionName)
+				end
+			end
+		end
+	end
+end
+
+-- Global function to set the value of the slider
+function Library:ChangeSliderValue(SliderName, Value)
+	for i,v in pairs(Section.Container:GetChildren()) do
+		if v.Name == SliderName .. " S" then
+			SetValue(Value)
+		end
+	end
+end
+
+-- Global function to change the keybind of a toggle
+function Library:ChangeKeybindValue(Name, Keybind)
+	for i,v in pairs(Section.Container:GetChildren()) do
+		if v.Name == Name .. " T" then
+			v.Keybind.Text = "[ " .. Keybind .. " ]"
+		end
+	end
+end
+
+return ToggleInit
 
 return Library
