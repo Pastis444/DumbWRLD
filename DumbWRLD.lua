@@ -1103,6 +1103,7 @@ DumbWRLDs:CreateTextBox("Config Name", 'ex: stumpconfig', false, function(Value)
 
 local function loadconfigs(file)
     DumbWRLD = game:service'HttpService':JSONDecode(readfile("DumbWRLD/BSS_"..file..".json"))
+    print("Loaded config: "..file)
     -- update the gui
     for i,v in pairs(DumbWRLD.toggles) do
         if type(DumbWRLD.toggles[i]) == "boolean" then
