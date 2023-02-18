@@ -531,14 +531,14 @@ function Library:CreateWindow(Config, Parent)
                     end
                 end
 
-                if Default == nil then
-                    function SliderInit:SetValue(Value)
-                        GlobalSliderValue = Value
-                        Slider.Slider.Bar.Size = UDim2.new(Value / Max,0,1,0)
-                        Slider.Value.PlaceholderText = Value
-                        Callback(Value)
-                    end
-                else
+                function SliderInit:SetValue(Value)
+                    GlobalSliderValue = Value
+                    Slider.Slider.Bar.Size = UDim2.new(Value / Max,0,1,0)
+                    Slider.Value.PlaceholderText = Value
+                    Callback(Value)
+                end
+
+                if Default then
                     SetValue(DefaultLocal)
                 end
 

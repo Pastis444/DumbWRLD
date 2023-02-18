@@ -941,10 +941,12 @@ local autowealthclocktoggle = farmt:CreateToggle("Auto Wealth Clock", nil, funct
 local autogingerbreadbearstoggle = farmt:CreateToggle("Auto Gingerbread Bears", nil, function(State) DumbWRLD.toggles.collectgingerbreads = State end)
 local autosamovartoggle = farmt:CreateToggle("Auto Samovar", nil, function(State) DumbWRLD.toggles.autosamovar = State end)
 local autostockingstoggle = farmt:CreateToggle("Auto Stockings", nil, function(State) DumbWRLD.toggles.autostockings = State end)
-local autoplanterstoggle = farmt:CreateToggle("Auto Planters ⚙", nil, function(State) DumbWRLD.toggles.autoplanters = State end):AddToolTip("Will re-plant your planters after converting, if they hit x%")
+local autoplanterstoggle = farmt:CreateToggle("Auto Planters ⚙", nil, function(State) DumbWRLD.toggles.autoplanters = State end)
+autoplanterstoggle:AddToolTip("Will re-plant your planters after converting, if they hit x%")
 local autohoneycandlestoggle = farmt:CreateToggle("Auto Honey Candles", nil, function(State) DumbWRLD.toggles.autocandles = State end)
 local autobeesmasfeasttoggle = farmt:CreateToggle("Auto Beesmas Feast", nil, function(State) DumbWRLD.toggles.autofeast = State end)
-local autohoneywreathtoggle = farmt:CreateToggle("Auto Honey Wreath", nil, function(State) DumbWRLD.toggles.autohoneywreath = State end):AddToolTip("Will go to Honey Wreath when you have a full bag")
+local autohoneywreathtoggle = farmt:CreateToggle("Auto Honey Wreath", nil, function(State) DumbWRLD.toggles.autohoneywreath = State end)
+autohoneywreathtoggle:AddToolTip("Will go to Honey Wreath when you have a full bag")
 local autoonettslidarttoggle = farmt:CreateToggle("Auto Onett's Lid Art", nil, function(State) DumbWRLD.toggles.autoonettart = State end)
 local autofreeantpassestoggle = farmt:CreateToggle("Auto Free Antpasses", nil, function(State) DumbWRLD.toggles.freeantpass = State end)
 local farmsproutstoggle = farmt:CreateToggle("Farm Sprouts", nil, function(State) DumbWRLD.toggles.farmsprouts = State end)
@@ -962,11 +964,15 @@ local trainsnailtoggle = mobkill:CreateToggle("Train Snail", nil, function(State
 local killmondotoggle = mobkill:CreateToggle("Kill Mondo", nil, function(State) DumbWRLD.toggles.killmondo = State end)
 local killvicioustoggle = mobkill:CreateToggle("Kill Vicious", nil, function(State) DumbWRLD.toggles.killvicious = State end)
 local killwindytoggle = mobkill:CreateToggle("Kill Windy", nil, function(State) DumbWRLD.toggles.killwindy = State end)
-local autokillmobstoggle = mobkill:CreateToggle("Auto Kill Mobs", nil, function(State) DumbWRLD.toggles.autokillmobs = State end):AddToolTip("Kills mobs after x pollen converting")
+local autokillmobstoggle = mobkill:CreateToggle("Auto Kill Mobs", nil, function(State) DumbWRLD.toggles.autokillmobs = State end)
+autokillmobstoggle:AddToolTip("Kills mobs after x pollen converting")
 local avoidmobstoggle = mobkill:CreateToggle("Avoid Mobs", nil, function(State) DumbWRLD.toggles.avoidmobs = State end)
-local autoanttoggle = mobkill:CreateToggle("Auto Ant", nil, function(State) DumbWRLD.toggles.autoant = State end):AddToolTip("You Need Spark Stuff 😋; Goes to Ant Challenge after pollen converting")
-local autoantonquesttoggle = mobkill:CreateToggle("Auto Ant On Quest", nil, function(State) DumbWRLD.toggles.autoantonquest = State end):AddToolTip("You Need Spark Stuff 😋; Goes to Ant Challenge after pollen converting")
-local autodemonmasktoggle = mobkill:CreateToggle("Auto Demon Mask", nil, function(State) DumbWRLD.toggles.demonmask = State end):AddToolTip("You Need Demon Mask 😈; Equip Demon Mask to Kill Mob")
+local autoanttoggle = mobkill:CreateToggle("Auto Ant", nil, function(State) DumbWRLD.toggles.autoant = State end)
+autoanttoggle:AddToolTip("You Need Spark Stuff 😋; Goes to Ant Challenge after pollen converting")
+local autoantonquesttoggle = mobkill:CreateToggle("Auto Ant On Quest", nil, function(State) DumbWRLD.toggles.autoantonquest = State end)
+autoantonquesttoggle:AddToolTip("You Need Spark Stuff 😋; Goes to Ant Challenge after pollen converting")
+local autodemonmasktoggle = mobkill:CreateToggle("Auto Demon Mask", nil, function(State) DumbWRLD.toggles.demonmask = State end)
+autodemonmasktoggle:AddToolTip("You Need Demon Mask 😈; Equip Demon Mask to Kill Mob")
 
 
 local amks = combtab:CreateSection("Auto Kill Mobs Settings")
@@ -992,7 +998,8 @@ local useoiltoggle = itemt:CreateToggle("Use Oil", nil, function(State) DumbWRLD
 local useenzymetoggle = itemt:CreateToggle("Use Enzyme", nil, function(State) DumbWRLD.toggles.enzyme = State end)
 local usegluetoggle = itemt:CreateToggle("Use Glue", nil, function(State) DumbWRLD.toggles.glue = State end)
 local useglittertoggle = itemt:CreateToggle("Use Glitter", nil, function(State) DumbWRLD.toggles.glitter = State end)
-local usefielddicetoggle = itemt:CreateToggle("Use Field Dice", nil, function(State) DumbWRLD.toggles.fielddice = State end):AddToolTip("WARNING : Can use a LOT of Field Dice (because it's RNG)")
+local usefielddicetoggle = itemt:CreateToggle("Use Field Dice", nil, function(State) DumbWRLD.toggles.fielddice = State end)
+usefielddicetoggle:AddToolTip("WARNING : Can use a LOT of Field Dice (because it's RNG)")
 local glitterdropdown = itemt:CreateDropdown("Field for Glitter and Filed Dice", fieldstable, function(String) extrasvars.field = String end) glitterdropdown:SetOption(fieldstable[2])
 local usetropicaldrinktoggle = itemt:CreateToggle("Use Tropical Drink", nil, function(State) DumbWRLD.toggles.tropicaldrink = State end)
 local usesnowflaketoggle = itemt:CreateToggle("Use Snowflake", nil, function(State) DumbWRLD.toggles.snowflake = State end)
@@ -1175,6 +1182,7 @@ local toggles = {
     convertballoons = converthiveballoontoggle,
     donotfarmtokens = dontfarmtokenstoggle,
     enabletokenblacklisting = enabletokenblacklistingtoggle,
+    autoboosters = autofieldboosterstoggle,
     -- the dispensers are not in DumbWRLD.toggles because they are in DumbWRLD.dispensers, so i add _dispensesettings to the end of the variable name
     -- like a reverse domain and i check if the variable name ends in _dispensesettings in the update gui function
     rj_dispensesettings = royaljellydispensertoggle,
@@ -1237,6 +1245,7 @@ local function loadconfigs(file)
             DumbWRLD[i] = v
         end
     end
+    temptable.configname = file
 
     -- update gui
 
@@ -1275,6 +1284,9 @@ local function loadconfigs(file)
             local var = i:gsub("_vars", "")
             -- get the variable value
             local value = DumbWRLD.vars[var]
+            if value == 'Bee Bear (X-Mas Bear)' then
+                value = 'Snow Cub Reformation'
+            end
             -- update the gui
             v:SetOption(value)
         -- if the variable name ends in _bestfields, then it is in the bestfields table
