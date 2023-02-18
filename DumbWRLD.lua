@@ -1284,11 +1284,13 @@ local function loadconfigs(file)
             local var = i:gsub("_vars", "")
             -- get the variable value
             local value = DumbWRLD.vars[var]
+            print(f'updating {var} to {value}')
             if value == 'Snow Cub Reformation' then
                 value = 'Bee Bear (X-Mas Bear)'
             end
             -- update the gui
             v:SetOption(value)
+            print(f'set the dropdown to {value}')
         -- if the variable name ends in _bestfields, then it is in the bestfields table
         elseif string.find(i, "_bestfields") then
             -- get the variable name
