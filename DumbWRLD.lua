@@ -1330,15 +1330,19 @@ local function loadconfigs(file)
             -- get the variable value
             local value = DumbWRLD.vars[var]
             -- update the gui
-            v:SetValue(value)
+            if value then
+                v:SetValue(value)
+            end
         -- if the variable name ends in _root, then it is in the root table
         elseif string.find(i, "_root") then
             -- get the variable name
-            local var = i:sub(1,-7)
+            local var = i:gsub("_root", "")
             -- get the variable value
             local value = DumbWRLD[var]
             -- update the gui
-            v:SetValue(value)
+            if value then
+                v:SetValue(value)
+            end
         end
     end
 
