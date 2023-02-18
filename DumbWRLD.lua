@@ -1284,8 +1284,8 @@ local function loadconfigs(file)
             local var = i:gsub("_vars", "")
             -- get the variable value
             local value = DumbWRLD.vars[var]
-            if value == 'Bee Bear (X-Mas Bear)' then
-                value = 'Snow Cub Reformation'
+            if value == 'Snow Cub Reformation' then
+                value = 'Bee Bear (X-Mas Bear)'
             end
             -- update the gui
             v:SetOption(value)
