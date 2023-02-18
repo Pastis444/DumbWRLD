@@ -1063,15 +1063,15 @@ end)
 raresettings:CreateDropdown("Tokens Blacklist", DumbWRLD.bltokens, function(Option) end)
 raresettings:CreateDropdown("Rares List", DumbWRLD.rares, function(Option) end)
 local dispsettings = setttab:CreateSection("Auto Dispenser & Auto Boosters Settings")
-local royaljellydispensertoggle = dispsettings:CreateToggle("Royal Jelly Dispenser", nil, function(State) DumbWRLD.dispensesettings.rj = not DumbWRLD.dispensesettings.rj end)
-local blueberrydispensertoggle = dispsettings:CreateToggle("Blueberry Dispenser", nil,  function(State) DumbWRLD.dispensesettings.blub = not DumbWRLD.dispensesettings.blub end)
-local strawberrydispensertoggle = dispsettings:CreateToggle("Strawberry Dispenser", nil,  function(State) DumbWRLD.dispensesettings.straw = not DumbWRLD.dispensesettings.straw end)
-local treatdispensertoggle = dispsettings:CreateToggle("Treat Dispenser", nil,  function(State) DumbWRLD.dispensesettings.treat = not DumbWRLD.dispensesettings.treat end)
-local coconutdispensertoggle = dispsettings:CreateToggle("Coconut Dispenser", nil,  function(State) DumbWRLD.dispensesettings.coconut = not DumbWRLD.dispensesettings.coconut end)
-local gluedispensertoggle = dispsettings:CreateToggle("Glue Dispenser", nil,  function(State) DumbWRLD.dispensesettings.glue = not DumbWRLD.dispensesettings.glue end)
-local mountaintopboostertoggle = dispsettings:CreateToggle("Mountain Top Booster", nil,  function(State) DumbWRLD.dispensesettings.white = not DumbWRLD.dispensesettings.white end)
-local bluefieldboostertoggle = dispsettings:CreateToggle("Blue Field Booster", nil,  function(State) DumbWRLD.dispensesettings.blue = not DumbWRLD.dispensesettings.blue end)
-local redfieldboostertoggle = dispsettings:CreateToggle("Red Field Booster", nil,  function(State) DumbWRLD.dispensesettings.red = not DumbWRLD.dispensesettings.red end)
+local royaljellydispensertoggle = dispsettings:CreateToggle("Royal Jelly Dispenser", nil, function(State) DumbWRLD.dispensesettings.rj = State end)
+local blueberrydispensertoggle = dispsettings:CreateToggle("Blueberry Dispenser", nil,  function(State) DumbWRLD.dispensesettings.blub = State end)
+local strawberrydispensertoggle = dispsettings:CreateToggle("Strawberry Dispenser", nil,  function(State) DumbWRLD.dispensesettings.straw = State end)
+local treatdispensertoggle = dispsettings:CreateToggle("Treat Dispenser", nil,  function(State) DumbWRLD.dispensesettings.treat = State end)
+local coconutdispensertoggle = dispsettings:CreateToggle("Coconut Dispenser", nil,  function(State) DumbWRLD.dispensesettings.coconut = State end)
+local gluedispensertoggle = dispsettings:CreateToggle("Glue Dispenser", nil,  function(State) DumbWRLD.dispensesettings.glue = State end)
+local mountaintopboostertoggle = dispsettings:CreateToggle("Mountain Top Booster", nil,  function(State) DumbWRLD.dispensesettings.white = State end)
+local bluefieldboostertoggle = dispsettings:CreateToggle("Blue Field Booster", nil,  function(State) DumbWRLD.dispensesettings.blue = State end)
+local redfieldboostertoggle = dispsettings:CreateToggle("Red Field Booster", nil,  function(State) DumbWRLD.dispensesettings.red = State end)
 local guisettings = setttab:CreateSection("GUI Settings")
 local uitoggle = guisettings:CreateToggle("UI Toggle", nil, function(State) Window:Toggle(State) end)
 local uitogglekeybind = uitoggle:CreateKeybind(tostring(DumbWRLD.vars.Keybind):gsub("Enum.KeyCode.", ""), function(Key) DumbWRLD.vars.Keybind = Enum.KeyCode[Key] end) uitoggle:SetState(true)
@@ -1243,9 +1243,9 @@ local function loadconfigs(file)
     -- updating the togglable gui elements
     for i,v in pairs(toggles) do
         -- if the variable name ends in _dispensesettings, then it is a dispenser
-        if i:sub(-16) == "_dispensesettings" then
+        if string.find(i, "_dispensesettings") then
             -- get the dispenser name
-            local dispenser = i:sub(1,-17)
+            local dispenser = i:gsub("_dispensesettings", "")
             -- get the dispenser settings
             local settings = DumbWRLD.dispensesettings[dispenser]
             -- update the gui
@@ -1262,25 +1262,25 @@ local function loadconfigs(file)
     -- updating the dropdown gui elements
     for i,v in pairs(dropdowns) do
         -- if the variable name ends in _extrasvars, then it is in the extrasvars table
-        if i:sub(-11) == "_extrasvars" then
+        if string.find(i ,"_extrasvars") then
             -- get the variable name
-            local var = i:sub(1,-12)
+            local var = i:gsub("_extrasvars", "")
             -- get the variable value
             local value = extrasvars[var]
             -- update the gui
             v:SetOption(value)
             --if the variable name ends in _vars, then it is in the vars table
-        elseif i:sub(-6) == "_vars" then
+        elseif string.find(i, "_vars") then
             -- get the variable name
-            local var = i:sub(1,-7)
+            local var = i:gsub("_vars", "")
             -- get the variable value
             local value = DumbWRLD.vars[var]
             -- update the gui
             v:SetOption(value)
         -- if the variable name ends in _bestfields, then it is in the bestfields table
-        elseif i:sub(-12) == "_bestfields" then
+        elseif string.find(i, "_bestfields") then
             -- get the variable name
-            local var = i:sub(1,-13)
+            local var = i:gsub("_bestfields", "")
             -- get the variable value
             local value = DumbWRLD.bestfields[var]
             -- update the gui
@@ -1291,17 +1291,17 @@ local function loadconfigs(file)
     -- updating the textbox gui elements
     for i,v in pairs(textboxes) do
         -- if the variable name ends in _vars, then it is in the vars table
-        if i:sub(-6) == "_vars" then
+        if string.find(i, "_vars") then
             -- get the variable name
-            local var = i:sub(1,-7)
+            local var = i:gsub("_vars", "")
             -- get the variable value
             local value = DumbWRLD.vars[var]
             -- update the gui
             v:SetValue(value)
         -- if the variable name ends in _temptable, then it is in the temptable table
-        elseif i:sub(-11) == "_temptable" then
+        elseif string.find(i, "_temptable") then
             -- get the variable name
-            local var = i:sub(1,-12)
+            local var = i:gsub("_temptable", "")
             -- get the variable value
             local value = temptable[var]
             -- update the gui
@@ -1312,15 +1312,15 @@ local function loadconfigs(file)
     -- updating the slider gui elements
     for i,v in pairs(sliders) do
         -- if the variable name ends in _vars, then it is in the vars table
-        if i:sub(-6) == "_vars" then
+        if string.find(i, "_vars") then
             -- get the variable name
-            local var = i:sub(1,-7)
+            local var = i:gsub("_vars", "")
             -- get the variable value
             local value = DumbWRLD.vars[var]
             -- update the gui
             v:SetValue(value)
         -- if the variable name ends in _root, then it is in the root table
-        elseif i:sub(-6) == "_root" then
+        elseif string.find(i, "_root") then
             -- get the variable name
             local var = i:sub(1,-7)
             -- get the variable value
@@ -1333,9 +1333,9 @@ local function loadconfigs(file)
     -- updating the keybind gui elements
     for i,v in pairs(keybinds) do
         -- if the variable name ends in _vars, then it is in the vars table
-        if i:sub(-6) == "_vars" then
+        if string.find(i, "_vars") then
             -- get the variable name
-            local var = i:sub(1,-7)
+            local var = i:gsub("_vars", "")
             -- get the variable value
             local value = DumbWRLD.vars[var]
             -- update the gui
